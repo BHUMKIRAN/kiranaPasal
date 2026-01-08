@@ -1,4 +1,5 @@
 import AdminSidebar from "@/components/adminsidebar";
+import Header from "@/components/header/page";
 
 export const metadata = {
   title: "Admin Panel",
@@ -8,6 +9,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   return (
     <div className="flex h-screen">
       {/* Sidebar */}
+      <Header/>
       <AdminSidebar />
 
       {/* Main content */}
