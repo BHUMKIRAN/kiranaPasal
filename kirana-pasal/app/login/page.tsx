@@ -1,15 +1,19 @@
-'use client'
+'use client' // important for client-side hooks
+
 import React from 'react'
-import { useRouter } from 'next/router' // if using Next.js
+import { useRouter } from 'next/navigation'
 
-// const Login = () => {
-//   const router = useRouter();
+const Login = () => {
+  const router = useRouter();
 
-//   const handleForgetPassword = () => {
-//     router.push('/forgetPassword'); // redirect to forget password page
-//   }
+  const handleForgetPassword = () => {
+    router.push('/forgetPassword'); // redirect to forget password page
+  }
 
-const Login =()=>{
+  const handleRegister = () => {
+    router.push('/register'); // redirect to register page
+  }
+
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
       <div className="flex flex-col justify-center items-center border-2 border-blue-300 shadow-2xl shadow-amber-300 rounded-2xl h-[28rem] w-80 m-5 p-5 space-y-4 bg-gray-200">
@@ -37,10 +41,10 @@ const Login =()=>{
           />
         </div>
 
-        {/* <div className="flex space-x-4">
+        <div className="flex space-x-4 mt-4">
           <button
             className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-            onClick={() => router.push('/register')}
+            onClick={handleRegister}
           >
             Register
           </button>
@@ -51,7 +55,7 @@ const Login =()=>{
           >
             Forget Password
           </button>
-        </div> */}
+        </div>
       </div>
     </div>
   )
