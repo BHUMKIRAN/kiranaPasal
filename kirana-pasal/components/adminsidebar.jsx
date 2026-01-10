@@ -18,7 +18,7 @@ const AdminSidebar = () => {
       <div className="p-6 text-2xl font-bold border-b border-gray-700">Kirana Admin</div>
       <nav className="flex-1 p-4">
         {menu.map((item) => (
-          <Link key={item.name} href={item.path}>
+          <Link key={item.name} href={item.path}>    
             <span
               className={`block py-2 px-4 rounded mb-2 hover:bg-gray-700 ${
                 pathname === item.path ? "bg-gray-700" : ""

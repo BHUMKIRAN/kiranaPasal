@@ -9,7 +9,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   return (
     <div className="flex h-screen">
       {/* Sidebar */}
-      <Header/>
+      {/* <Header/> */}
       <AdminSidebar />
 
       {/* Main content */}

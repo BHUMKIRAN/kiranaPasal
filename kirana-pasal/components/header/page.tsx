@@ -8,7 +8,7 @@ export default function Header() {
             <header
                 className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between
                    px-6 py-3 m-2 rounded-xl shadow-md
-                   bg-gradient-to-r from-amber-200 via-red-200 to-pink-200">
+                   bg-gradient-to-r from-amber-200 via-red-200 to-pink-200 h-20">
 
                 {/* Left: Logo */}
                 <strong className="text-lg uppercase">
