@@ -3,8 +3,7 @@ import SideBarAll from "@/components/sidebarall";
 import axios from "axios";
 
 const Home = async () => {
-  const { data } = await axios.get(
-    "https://api.escuelajs.co/api/v1/products"
+  const  {data}  = await axios.get("https://fakestoreapi.com/products"
   );
 
   return (
@@ -21,7 +20,7 @@ const Home = async () => {
         <div className="flex-1 p-5">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
             {data.map((item) => (
-              <div
+              <div 
                 key={item.id}
                 className="bg-white border rounded-xl shadow-lg p-4 flex flex-col items-center"
               >
@@ -31,7 +30,7 @@ const Home = async () => {
 
                 <img
                   className="rounded-lg shadow-md mb-3"
-                  src={item.images[0]}
+                  src={item.image}
                   alt={item.title}
                   width={200}
                   height={200}
