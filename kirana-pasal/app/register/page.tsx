@@ -1,118 +1,74 @@
 'use client'
-import React, { useState } from 'react'
+import React from 'react'
+import { Formik, Form, Field, ErrorMessage } from 'formik'
+import * as Yup from 'yup'
 
 const Register = () => {
-  // State for form inputs
-  const [formData, setFormData] = useState({
-    fullname: '',
-    email: '',
-    password: '',
-    confirmPassword: ''
-  });
+  const validationSchema = Yup.object({
+    fullname: Yup.string().min(3, 'Min 3 chars').required('Full name required'),
+    email: Yup.string().email('Invalid email').required('Email required'),
+    password: Yup.string().min(6, 'Min 6 chars').required('Password required'),
+    confirmPassword: Yup.string()
+      .oneOf([Yup.ref('password'), null], 'Passwords must match')
+      .required('Confirm password required'),
+  })
 
-  // Handle input changes
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  }
-
-  // Check if passwords match
-  const checkPasswords = (password, confirmPassword) => {
-    if (password !== confirmPassword) {
-      alert("Your passwords do not match!");
-      return false;
+  const handleSubmit = async (values: any, { setSubmitting, resetForm }: any) => {
+    try {
+      const payload = { id: 0, username: values.fullname, email: values.email, password: values.password }
+      const response = await fetch('https://fakestoreapi.com/users', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+      const data = await response.json()
+      console.log('User created:', data)
+      alert('Registration successful!')
+      resetForm()
+    } catch {
+      alert('Something went wrong')
+    } finally {
+      setSubmitting(false)
     }
-    return true;
-  }
-
-  // Handle form submission
-  const handleSubmit = (e) => {
-    e.preventDefault(); // prevent page refresh
-
-    // Validate passwords
-    if (!checkPasswords(formData.password, formData.confirmPassword)) {
-      return; // stop submission if passwords don't match
-    }
-
-    // If valid, submit to database (placeholder)
-    console.log('Form Data Submitted:', formData);
-
-    // Reset form (optional)
-    setFormData({
-      fullname: '',
-      email: '',
-      password: '',
-      confirmPassword: ''
-    });
-
-    alert("Registration successful!");
   }
 
   return (
-    <div className="flex justify-center">
-      <div className="flex flex-col justify-center items-center m-5 h-auto w-80 font-serif bg-gray-400 rounded-xl shadow-2xl p-5 space-y-4">
-        <h1 className="text-2xl font-semibold text-center">Register</h1>
-        
-        <form className="flex flex-col space-y-3 w-full" onSubmit={handleSubmit}>
-          <div className="flex flex-col">
-            <label htmlFor="fullname"><span className="text-red-700">*</span> Full Name</label>
-            <input
-              className="w-full border rounded p-2"
-              type="text"
-              name="fullname"
-              id="fullname"
-              value={formData.fullname}
-              onChange={handleChange}
-              required
-            />
-          </div>
+    <div className="flex justify-center items-center min-h-screen bg-gray-100 p-5">
+      <div className="flex flex-col bg-white w-80 p-6 rounded-xl shadow-lg space-y-4">
+        <h1 className="text-xl font-bold text-center uppercase">Register</h1>
 
-          <div className="flex flex-col">
-            <label htmlFor="email"><span className="text-red-700">*</span> Email</label>
-            <input
-              className="w-full border rounded p-2"
-              type="email"
-              name="email"
-              id="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-            />
-          </div>
+        <Formik
+          initialValues={{ fullname: '', email: '', password: '', confirmPassword: '' }}
+          validationSchema={validationSchema}
+          onSubmit={handleSubmit}
+        >
+          {({ isSubmitting }) => (
+            <Form className="flex flex-col space-y-3">
+              {['fullname','email','password','confirmPassword'].map((field) => (
+                <div key={field} className="flex flex-col">
+                  <label className="font-medium mb-1" htmlFor={field}>
+                    {field === 'fullname' ? 'Full Name' : field.charAt(0).toUpperCase() + field.slice(1)}
+                  </label>
+                  <Field
+                    type={field.includes('password') ? 'password' : 'text'}
+                    name={field}
+                    placeholder={`Enter ${field}`}
+                    className="w-full border rounded p-2 ring ring-blue-300/50"
+                  />
+                  <ErrorMessage name={field} component="div" className="text-red-500 text-sm mt-1" />
+                </div>
+              ))}
 
-          <div className="flex flex-col">
-            <label htmlFor="password"><span className="text-red-700">*</span> Password</label>
-            <input
-              className="w-full border rounded p-2"
-              type="password"
-              name="password"
-              id="password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-            />
-          </div>
-
-          <div className="flex flex-col">
-            <label htmlFor="confirmPassword"><span className="text-red-700">*</span> Confirm Password</label>
-            <input
-              className="w-full border rounded p-2"
-              type="password"
-              name="confirmPassword"
-              id="confirmPassword"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              required
-            />
-          </div>
-
-          <button
-            className="bg-cyan-500 shadow-lg shadow-cyan-500/50 border border-blue-800 rounded py-2 mt-2 text-white font-semibold hover:bg-cyan-600"
-            type="submit"
-          >
-            Submit
-          </button>
-        </form>
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full py-2 rounded font-semibold text-white bg-blue-500 hover:bg-blue-600"
+              >
+                {isSubmitting ? 'Registering...' : 'Register'}
+              </button>
+            </Form>
+          )}
+        </Formik>
       </div>
     </div>
   )
