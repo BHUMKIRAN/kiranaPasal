@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import Router from "next/router"
 
 export default function Header() {
     return (
@@ -12,15 +13,20 @@ export default function Header() {
 
                 {/* Left: Logo */}
                 <strong className="text-lg uppercase">
-                    <Link href="/">Kirana Pasal</Link>
+                    
+                    <button 
+                    type="button"
+                    onClick={()=>Router.push('/')}
+                    >
+                    kirana pasal</button>
                 </strong>
 
                 {/* Center: Navigation */}
                 <nav className="flex gap-6 font-medium">
-                    <Link href="/home" className="hover:underline">Home</Link>
-                    <Link href="/product" className="hover:underline">Product</Link>
-                    <Link href="/about" className="hover:underline">About Us</Link>
-                    <Link href="/contact" className="hover:underline">Contact</Link>
+                    <Link href="/">Home</Link>
+                    <Link href="/products">Products</Link>
+                    <Link href="/about">About</Link>
+                    <Link href="/contact">Contact</Link>        
                 </nav>
 
                 {/* Right: Settings + Cart */}

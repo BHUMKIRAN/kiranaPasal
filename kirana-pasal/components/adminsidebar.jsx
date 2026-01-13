@@ -7,10 +7,10 @@ const AdminSidebar = () => {
   const pathname = usePathname();
 
   const menu = [
-    { name: "Dashboard", path: "/dashboard/admin" },
-    { name: "Products", path: "/dashboard/admin/products" },
-    { name: "Orders", path: "/dashboard/admin/orders" },
-    { name: "Users", path: "/dashboard/admin/users" },
+    { name: "Dashboard", path: "/admin" },
+    { name: "Products", path: "/admin/products" },
+    { name: "Orders", path: "/admin/orders" },
+    { name: "Users", path: "/admin/users" },
   ];
 
   return (

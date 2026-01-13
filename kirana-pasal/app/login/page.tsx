@@ -15,13 +15,12 @@ const Login = () => {
     password: Yup.string().min(6, 'Min 6 chars').required('Password required'),
   })
 
-  const handleSubmit = async (values: any, { setSubmitting }: any) => {
+  const handleSubmit = async (values,  {setSubmitting} ) => {
     try {
       const response = await fetch('https://fakestoreapi.com/users')
       const users = await response.json()
-      const user = users.find(
-        (u: any) => u.email === values.email && u.password === values.password
-      )
+      const user = users.find((u) => u.email === values.email && u.password === values.password)
+
       if (user) {
         alert(`Login successful! Welcome ${user.username}`)
         router.push('/')
