@@ -1,0 +1,53 @@
+@layer components {
+  .product-container {
+    @apply overflow-x-auto;
+  }
+
+  .add-product-btn {
+    @apply px-3 py-1 mb-3 text-sm font-semibold text-white bg-green-500 rounded hover:bg-green-600;
+  }
+
+  .product-table {
+    @apply min-w-full border border-gray-300 rounded-lg overflow-hidden;
+  }
+
+  .product-thead {
+    @apply bg-gray-100;
+  }
+
+  .product-th {
+    @apply px-4 py-3 text-left text-sm font-semibold text-gray-700 border-b;
+  }
+
+  .product-row {
+    @apply transition hover:bg-gray-50;
+  }
+
+  .product-td {
+    @apply px-4 py-3 border-b;
+  }
+
+  .product-image {
+    @apply w-30 h-30 object-cover rounded shadow shadow-md ring ring-gray-200;
+  }
+
+  .product-badge {
+    @apply px-2 py-1 text-xs bg-blue-100 text-blue-600 rounded-full;
+  }
+
+  .action-btn {
+    @apply px-3 py-1 text-sm text-white rounded;
+  }
+
+  .btn-view {
+    @apply bg-green-500 hover:bg-green-600;
+  }
+
+  .btn-edit {
+    @apply bg-yellow-500 hover:bg-yellow-600;
+  }
+
+  .btn-delete {
+    @apply bg-red-500 hover:bg-red-600;
+  }
+}

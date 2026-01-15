@@ -1,4 +1,5 @@
 import AdminSidebar from "@/components/adminsidebar";
+import { LogOutIcon } from "lucide-react";
 
 export const metadata = {
   title: "Admin Panel",
@@ -27,6 +28,7 @@ export default function AdminLayout({
               Notifications
             </button>
             <div className="bg-gray-200 px-3 py-1 rounded">Admin</div>
+            <LogOutIcon/>
           </div>
         </header>
 

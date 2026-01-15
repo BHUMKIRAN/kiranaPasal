@@ -1,0 +1,43 @@
+{  "products": [
+    {
+      "Title": "wai wai noodles",
+      "Price": "20",
+      "Category": "noodles",
+      "Image": "https://waiwai.com.np/wp-content/uploads/2023/05/Wai-Wai.jpg",
+      "id": "1"  }
+      ,
+    {
+      "Title": "cookies",
+      "Price": "50",
+      "Category": "biscuits",
+      "Image": "https://unibicestore.com/cdn/shop/files/Unibic-Assorted-Cookies-pk-of-12-FOP.jpg?v=1701758621",
+      "id": "2   " },
+    {
+      "Title": "snickers",
+      "Price": "200",
+      "Category": "chocolate",
+      "Image": "https://www.kroger.com/product/images/large/front/0004000020132",
+      "id": "3"    },
+    {
+      "id": "4",
+      "Title": "dg",
+      "Image": "sf",
+      "Price": "212",
+      "Category": "12"
+     },
+    {
+      "id": "5",
+      "Title": "Meat Masala",
+      "Image": "https://www.khadyanna.com/storage/products/2023/March/02/312270146_572252101566643_2170303262212906217_n_1677739349.jpg",
+      "Price": "200",
+      "Category": "Masala"
+    },
+    {
+      "id": "6",
+      "Title": "",
+      "Image": "",
+      "Price": "",
+      "Category": ""
+   }
+  ]
+}
