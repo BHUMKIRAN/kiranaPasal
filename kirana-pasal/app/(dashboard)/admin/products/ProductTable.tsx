@@ -4,18 +4,33 @@ import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 
 
-
 const ProductTable = () => {
     const [products, setproducts] = useState([])
     const Router = useRouter();
+
     const fetchProducts = async () => {
-        const { data } = await axios.get("http://localhost:4000/products")
+        const { data } = await axios.get(`http://localhost:4000/products`)
         setproducts(data)
     }
 
     useEffect(() => {
         fetchProducts()
     }, [])
+
+const handleDelete = async (id) => {
+  if (!confirm("Are you sure want to delete ???")) return;
+
+  try {
+    await axios.delete(`http://localhost:4000/products/${id}`);
+
+    // Update UI instantly
+    setproducts((prev) => prev.filter((item) => item.id !== id));
+
+  } catch (error) {
+    console.error(error);
+  }
+};
+     
 
     return (
         <div className="product-container">
@@ -49,10 +64,16 @@ const ProductTable = () => {
                             </td>
                             <td className="product-td text-center space-x-2">
 
-                                <button className="action-btn btn-view"
-                                    onClick={() => Router.push(`/admin/products/${items.id || index}/ViewProduct`)}>View</button>
-                            <button className="action-btn btn-edit">Edit</button>
-                            <button className="action-btn btn-delete">Delete</button>
+                            <button className="action-btn btn-view"
+                            onClick={() => Router.push(`/admin/products/${items.id || index}/ViewProduct`)}
+                            >View</button>
+
+                            <button className="action-btn btn-edit"
+                            onClick={()=>Router.push(`/admin/products/${items.id}/EditProduct`)}
+                            >Edit</button>
+
+                            <button className="action-btn btn-delete"
+                            onClick={() => handleDelete(items.id)}>Delete</button>
                         </td>
                         </tr>
                     ))}

@@ -19,7 +19,7 @@ const Home = () => {
 
   // Fetch products function
   const fetchProducts = async () => {
-    const res = await axios.get("https://fakestoreapi.com/products");
+    const res = await axios.get("http://localhost:4000/products");
     setData(res.data);
   };
 
@@ -48,20 +48,20 @@ const Home = () => {
                 className="cursor-pointer bg-white border rounded-xl shadow-lg p-4 flex flex-col items-center hover:shadow-xl transition"
               >
                 <h2 className="font-semibold text-center mb-2">
-                  {item.title}
+                  {item.Title}
                 </h2>
 
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   className="rounded-lg shadow-md mb-3"
-                  src={item.image}
-                  alt={item.title}
+                  src={item.Image || null }
+                  alt={item.Title}
                   width={200}
                   height={200}
                 />
 
                 <span className="font-bold text-green-600">
-                  Price: ${item.price}
+                  Price: ${item.Price}
                 </span>
               </div>
             ))}

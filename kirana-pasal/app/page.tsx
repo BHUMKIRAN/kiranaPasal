@@ -7,7 +7,7 @@ const HomePage = () => {
     <div>
       <Header />
       <div className="pt-5 ml-5">
-        <SideBarAll />
+      <SideBarAll />
       </div>
     </div>
   );

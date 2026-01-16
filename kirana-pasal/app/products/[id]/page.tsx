@@ -22,7 +22,7 @@ const Id = () => {
     try {
       setLoading(true)
       const { data } = await axios.get(
-        `https://fakestoreapi.com/products/${params.id}`
+        `http://localhost:4000/products/${params.id}`
       )
       setProductDetail(data)
     } catch (error) {
@@ -62,8 +62,8 @@ const Id = () => {
           {/* Image Section */}
           <div className="flex-1 flex items-center justify-center bg-gray-50 rounded-xl p-6">
             <img
-              src={productDetail.image}
-              alt={productDetail.title}
+              src={productDetail.Image}
+              alt={productDetail.Title}
               className="max-h-[400px] object-contain transition-transform duration-300 hover:scale-105"
             />
           </div>
@@ -71,19 +71,15 @@ const Id = () => {
           {/* Details Section */}
           <div className="flex-1">
             <span className="inline-block mb-3 px-3 py-1 text-sm rounded-full bg-gray-200 text-gray-700">
-              {productDetail.category}
+              {productDetail.Category}
             </span>
 
             <h1 className="text-3xl font-bold text-gray-800 mb-4">
-              {productDetail.title}
+              {productDetail.Title}
             </h1>
 
             <p className="text-2xl font-semibold text-green-600 mb-6">
-              ${productDetail.price}
-            </p>
-
-            <p className="text-gray-600 leading-relaxed mb-8">
-              {productDetail.description}
+              ${productDetail.Price}
             </p>
 
             <div className="flex gap-4">
@@ -96,7 +92,6 @@ const Id = () => {
               </button>
             </div>
           </div>
-
         </div>
       </div>
     </div>
