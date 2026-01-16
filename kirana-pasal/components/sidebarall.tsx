@@ -12,16 +12,12 @@ const SideBarAll = () => {
   };
 
   return (
-    <aside className="flex flex-col w-56 bg-gray-400 p-4 shadow-xl rounded">
-      
-      {/* Title */}
-      <button
-        onClick={handleClick}
-        className="text-lg font-bold mb-3 text-center hover:underline"
-      >
-        HOME
-      </button>
+    <aside className="flex flex-col justify-center w-56 bg-gray-400 p-4 shadow-xl rounded">
 
+      <div>
+        <img src="/Logo.png" alt="Logo" className="rounded-[50%] mb-4 w-25 h-25" />
+      </div>
+      
       <hr className="border-2 border-black mb-4" />
 
       {/* Search */}

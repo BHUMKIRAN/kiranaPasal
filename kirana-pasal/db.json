@@ -5,7 +5,7 @@
       "Price": "50",
       "Category": "biscuits",
       "Image": "https://unibicestore.com/cdn/shop/files/Unibic-Assorted-Cookies-pk-of-12-FOP.jpg?v=1701758621",
-      "id": "2   "
+      "id": "10"
     },
     {
       "Title": "Snickers",
@@ -34,6 +34,29 @@
       "Image": "https://waiwai.com.np/wp-content/uploads/2023/05/Wai-Wai-Chicken-1-1.png",
       "Price": "20",
       "Category": "noodles"
+    }
+  ],
+  "users": [
+    {
+      "id": "1",
+      "name": "kiran",
+      "email": "kiran@gmail.com",
+      "phone": "123455",
+      "password": "password123"
+    },
+    {
+      "name": "Bibek",
+      "email": "Hari@gmail.com",
+      "phone": "2525654634",
+      "password": "vwett45t54w45w",
+      "id": "3"
+    },
+    {
+      "id": "4",
+      "name": "Hari",
+      "email": "bibek@gmail.com",
+      "phone": "2525654634",
+      "password": "twrwerwrwr"
     }
   ]
 }

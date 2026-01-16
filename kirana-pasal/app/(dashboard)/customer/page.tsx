@@ -8,9 +8,10 @@ import { useEffect, useState } from "react";
 
 interface Product {
   id: number;
-  title: string;
-  image: string;
-  price: number;
+  Title: string;
+  Image: string;
+  Price: number;
+  Category: string;
 }
 
 const Home = () => {
@@ -34,9 +35,9 @@ const Home = () => {
       <Header />
 
       {/* Page Body */}
-      <div className="flex bg-gray-200 h-screen pt-5">
+      <div className="flex bg-gray-200 h-screen">
         {/* Sidebar */}
-        <SideBarAll />
+        <SideBarAll />       
 
         {/* Main Content */}
         <div className="flex-1 p-5">
@@ -54,7 +55,7 @@ const Home = () => {
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   className="rounded-lg shadow-md mb-3"
-                  src={item.Image || null }
+                  src={item.Image || null}
                   alt={item.Title}
                   width={200}
                   height={200}
@@ -71,5 +72,4 @@ const Home = () => {
     </div>
   );
 };
-
 export default Home;
