@@ -1,11 +1,12 @@
 'use client'
 import React from 'react'
-import { useRouter } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
 
 const Login = () => {
   const router = useRouter()
+  const {id} = useParams()
 
   const handleForgetPassword = () => router.push('/forgetPassword')
   const handleRegister = () => router.push('/register')
@@ -17,13 +18,12 @@ const Login = () => {
 
   const handleSubmit = async (values,  {setSubmitting} ) => {
     try {
-      const response = await fetch('https://fakestoreapi.com/users')
+      const response = await fetch('http://localhost:4000/users')
       const users = await response.json()
       const user = users.find((u) => u.email === values.email && u.password === values.password)
-
       if (user) {
-        alert(`Login successful! Welcome ${user.username}`)
-        router.push('/')
+        alert(`Login successful! Welcome ${user.name}`)
+        router.push('/customer')
       } else alert('Invalid email or password')
     } catch {
       alert('Something went wrong')

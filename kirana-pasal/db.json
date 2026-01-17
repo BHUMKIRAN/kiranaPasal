@@ -57,6 +57,20 @@
       "email": "bibek@gmail.com",
       "phone": "2525654634",
       "password": "twrwerwrwr"
+    },
+    {
+      "id": "ffc0",
+      "name": "Bhum bikram silwal",
+      "email": "bhum@gmail.com",
+      "phone": "9825728567",
+      "password": "vhum@gmail"
+    },
+    {
+      "id": "56e6",
+      "name": "Ram",
+      "email": "ram@gmail.com",
+      "phone": "144352435",
+      "password": "Ram@gmail.com"
     }
   ]
 }

@@ -47,9 +47,9 @@ const UserTable = () => {
             </tr>
           </thead>
           <tbody>
-            {user.map((users) =>
+            {user.map((users,index) =>
               <tr key={users.id}>
-                <td className="px-6 py-3 tracking-wider whitespace-nowrap text-sm ">{users.id}</td>
+                <td className="px-6 py-3 tracking-wider whitespace-nowrap text-sm ">{index+1}</td>
                 <td>{users.name}</td>
                 <td>{users.email}</td>
                 <td>{users.password}</td>
