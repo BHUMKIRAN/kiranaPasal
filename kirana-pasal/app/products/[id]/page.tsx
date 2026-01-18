@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react"
 import axios from "axios"
 import { useParams } from "next/navigation"
+import { useRouter } from "next/navigation"
 
 interface Product {
   id: number
@@ -17,6 +18,8 @@ const Id = () => {
   const params = useParams()
   const [productDetail, setProductDetail] = useState(null)
   const [loading, setLoading] = useState(true)
+
+  const router= useRouter()
 
   const fetchProductDetail = async () => {
     try {
@@ -90,6 +93,11 @@ const Id = () => {
               <button className="flex-1 border border-gray-300 hover:bg-gray-100 py-3 rounded-xl font-semibold transition">
                 Buy Now
               </button>
+              <button 
+                onClick={()=>router.push("/customer")}
+                className="bg-blue-500 rounded-lg w-25 text-white hover:bg-blue-700">
+                    Return Back
+                </button>
             </div>
           </div>
         </div>

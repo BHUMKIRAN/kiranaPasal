@@ -45,20 +45,6 @@
       "password": "password123"
     },
     {
-      "name": "Bibek",
-      "email": "Hari@gmail.com",
-      "phone": "2525654634",
-      "password": "vwett45t54w45w",
-      "id": "3"
-    },
-    {
-      "id": "4",
-      "name": "Hari",
-      "email": "bibek@gmail.com",
-      "phone": "2525654634",
-      "password": "twrwerwrwr"
-    },
-    {
       "id": "ffc0",
       "name": "Bhum bikram silwal",
       "email": "bhum@gmail.com",
@@ -66,11 +52,18 @@
       "password": "vhum@gmail"
     },
     {
-      "id": "56e6",
-      "name": "Ram",
-      "email": "ram@gmail.com",
-      "phone": "144352435",
-      "password": "Ram@gmail.com"
+      "id": "dc5e",
+      "name": "Remi bansent",
+      "email": "remi@gmail.com",
+      "phone": "235434294834",
+      "password": "remi123"
+    },
+    {
+      "id": "0d25",
+      "name": "prakash thapa",
+      "email": "prakash@gmail.com",
+      "phone": "3565653",
+      "password": "sdfvtttrrrb"
     }
   ]
 }
