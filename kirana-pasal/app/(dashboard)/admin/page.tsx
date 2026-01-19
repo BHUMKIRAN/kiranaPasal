@@ -1,187 +1,114 @@
-"use client";
-import { useState } from "react";
+"use client"
 
-type User = {
-  id: number;
-  name: string;
-  email: string;
-  password: string;
-};
+import { TrendingUp } from "lucide-react"
+import { Bar, BarChart, CartesianGrid, LabelList, XAxis } from "recharts"
 
- function AdminDashboard() {
-  const initialUsers: User[] = [
-    { id: 1, name: "Kiran Doe", email: "kiran@gmail.com", password: "123456" },
-    { id: 2, name: "Jane Doe", email: "jane@gmail.com", password: "password@123" },
-  ];
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+  type ChartConfig,
+} from "@/components/ui/chart"
+import { useEffect, useState } from "react"
+import axios from "axios"
 
-  const [users, setUsers] = useState<User[]>(initialUsers);
-  const [showPassword, setShowPassword] = useState<number | null>(null);
-  const [editUserId, setEditUserId] = useState<number | null>(null);
-  const [editFormData, setEditFormData] = useState<User>({
-    id: 0,
-    name: "",
-    email: "",
-    password: "",
-  });
+export const description = "A bar chart with a label"
 
-  // Delete user
-  const handleDelete = (id: number) => {
-    const filtered = users.filter((user) => user.id !== id);
-    setUsers(filtered);
-  };
+const chartData = []
 
-  // Start editing
-  const handleEdit = (user: User) => {
-    setEditUserId(user.id);
-    setEditFormData(user);
-  };
+const chartConfig = {
+  quantity: {
+    label: "quantity",
+    color: "var(--chart-1)",
+  },
+} satisfies ChartConfig
 
-  // Save edited user
-  const handleSave = () => {
-    setUsers(
-      users.map((user) =>
-        user.id === editUserId ? { ...editFormData } : user
-      )
-    );
-    setEditUserId(null);
-  };
+export default function ChartBarLabel() {
 
-  // Handle form changes
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEditFormData({ ...editFormData, [e.target.name]: e.target.value });
-  };
+  const [chartData, setChartData] = useState([])
+
+  const fetchdata = async () => {
+    const { data } = await axios.get("http://localhost:4000/products")
+
+    const groupedData = Object.values(
+      data.reduce((acc, item) => {
+        const category = item.Category
+
+        if (!acc[category]) {
+          acc[category] = {
+            category: category,
+            quantity: 0
+          }
+        }
+
+        acc[category].quantity += 1
+        return acc
+      }, {})
+    )
+
+
+    setChartData(groupedData)
+  }
+
+  useEffect(() => {
+    fetchdata()
+
+  }, [])
 
   return (
-    <div className="p-6 bg-gray-100 min-h-screen">
-      <h2 className="text-3xl font-bold mb-6 text-gray-800">
-        User Management
-      </h2>
-
-      <div className="overflow-x-auto bg-white shadow-md rounded-lg">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase">
-                ID
-              </th>
-              <th className="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase">
-                Name
-              </th>
-              <th className="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase">
-                Email
-              </th>
-              <th className="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase">
-                Password
-              </th>
-              <th className="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase">
-                Actions
-              </th>
-            </tr>
-          </thead>
-
-          <tbody className="divide-y divide-gray-200">
-            {users.map((user) => (
-              <tr key={user.id} className="hover:bg-gray-100">
-                <td className="px-6 py-4">{user.id}</td>
-
-                <td className="px-6 py-4">
-                  {editUserId === user.id ? (
-                    <input
-                      type="text"
-                      name="name"
-                      value={editFormData.name}
-                      onChange={handleChange}
-                      className="border px-2 py-1 rounded w-full"
-                    />
-                  ) : (
-                    user.name
-                  )}
-                </td>
-
-                <td className="px-6 py-4">
-                  {editUserId === user.id ? (
-                    <input
-                      type="email"
-                      name="email"
-                      value={editFormData.email}
-                      onChange={handleChange}
-                      className="border px-2 py-1 rounded w-full"
-                    />
-                  ) : (
-                    user.email
-                  )}
-                </td>
-
-                <td className="px-6 py-4 flex items-center gap-3">
-                  {editUserId === user.id ? (
-                    <input
-                      type="text"
-                      name="password"
-                      value={editFormData.password}
-                      onChange={handleChange}
-                      className="border px-2 py-1 rounded w-full font-mono"
-                    />
-                  ) : (
-                    <span className="font-mono">
-                      {showPassword === user.id
-                        ? user.password
-                        : "********"}
-                    </span>
-                  )}
-
-                  {!editUserId && (
-                    <button
-                      onClick={() =>
-                        setShowPassword(
-                          showPassword === user.id ? null : user.id
-                        )
-                      }
-                      className="text-blue-600 text-sm hover:underline"
-                    >
-                      {showPassword === user.id ? "Hide" : "Show"}
-                    </button>
-                  )}
-                </td>
-
-                <td className="px-6 py-4 flex gap-2">
-                  {editUserId === user.id ? (
-                    <>
-                      <button
-                        onClick={handleSave}
-                        className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
-                      >
-                        Save
-                      </button>
-                      <button
-                        onClick={() => setEditUserId(null)}
-                        className="bg-gray-300 px-3 py-1 rounded hover:bg-gray-400"
-                      >
-                        Cancel
-                      </button>
-                    </>
-                  ) : (
-                    <>
-                      <button
-                        onClick={() => handleEdit(user)}
-                        className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
-                      >
-                        Edit
-                      </button>
-                      <button
-                        onClick={() => handleDelete(user.id)}
-                        className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
-                      >
-                        Delete
-                      </button>
-                    </>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  );
+    <Card className="h-70 w-70 shadow-xl ">
+      <CardHeader>
+        <CardTitle>Product vs Quantity sale</CardTitle>
+        <CardDescription>All time </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <ChartContainer config={chartConfig}>
+          <BarChart
+            accessibilityLayer
+            data={chartData}
+            margin={{
+              top: 10,
+            }}
+          >
+            <CartesianGrid vertical={false} />
+            <XAxis
+              dataKey="category"
+              tickLine={false}
+              tickMargin={10}
+              axisLine={false}
+              tickFormatter={(value) => value.slice(0, 3)}
+            />
+            <ChartTooltip
+              cursor={false}
+              content={<ChartTooltipContent hideLabel />}
+            />
+            <Bar dataKey="quantity" fill="var(--color-quantity)" radius={8}>
+              <LabelList
+                position="top"
+                offset={12}
+                className="fill-foreground"
+                fontSize={12}
+              />
+            </Bar>
+          </BarChart>
+        </ChartContainer>
+      </CardContent>
+      <CardFooter className="flex-col items-start gap-2 text-sm">
+        <div className="flex gap-2 leading-none font-medium">
+          Trending up by 5.2% this category <TrendingUp className="h-4 w-4" />
+        </div>
+        <div className="text-muted-foreground leading-none">
+          Showing total quantity for the last 6 categorys
+        </div>
+      </CardFooter>
+    </Card>
+  )
 }
-export default AdminDashboard;
