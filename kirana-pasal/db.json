@@ -65,5 +65,15 @@
       "phone": "3565653",
       "password": "sdfvtttrrrb"
     }
+  ],
+  "cart": [
+    {
+      "id": "3110",
+      "productId": "3",
+      "Title": "Snickers",
+      "Price": "200",
+      "Image": "https://www.kroger.com/product/images/large/front/0004000020132",
+      "Quantity": 1
+    }
   ]
 }

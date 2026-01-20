@@ -1,15 +1,19 @@
+'use client'
 import AdminSidebar from "@/components/adminsidebar";
 import { LogOutIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
 
-export const metadata = {
-  title: "Admin Panel",
-};
+// export const metadata = {
+//   title: "Admin Panel",
+// };
 
 export default function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+
+  const router = useRouter()
   return (
     <div className="flex h-screen overflow-hidden">
       {/* Sidebar */}
@@ -28,7 +32,11 @@ export default function AdminLayout({
               Notifications
             </button>
             <div className="bg-gray-200 px-3 py-1 rounded">Admin</div>
-            <LogOutIcon/>
+
+            <button type="button" className=" hover:text-red-600"
+            
+            onClick={()=>router.push('/login')}><LogOutIcon/></button>
+            
           </div>
         </header>
 
