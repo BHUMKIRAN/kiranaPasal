@@ -1,35 +1,59 @@
 "use client";
 
-import { SearchIcon, Settings2, LayoutDashboard, BarChart3 } from "lucide-react";
-import React from "react";
+import {
+  SearchIcon,
+  Settings2,
+  LayoutDashboard,
+  BarChart3,
+  Search,
+} from "lucide-react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import { Input } from "./ui/input";
 
 const SideBarAll = () => {
   const router = useRouter();
+  const [message, setMessage] = useState(""); // ✅ string
 
-  const handleClick = () => {
-    router.push("/home");
+  const handleSearch = () => {
+    if (!message.trim()) return;
+
+    router.push(`/chat?q=${encodeURIComponent(message)}`);
+
+    setMessage("");
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleSearch();
+    }
   };
 
   return (
     <aside className="flex flex-col justify-center w-56 bg-gray-400 p-4 shadow-xl rounded">
-
       <div>
-        <img src="/Logo.png" alt="Logo" className="rounded-[50%] mb-4 w-25 h-25" />
+        <img
+          src="/Logo.png"
+          alt="Logo"
+          className="rounded-[50%] mb-4 w-25 h-25"
+        />
       </div>
-      
+
       <hr className="border-2 border-black mb-4" />
 
       {/* Search */}
-      <div className="relative mb-4">
-        <input
-          type="text"
+      <div className="relative mb-2">
+        <Input
           placeholder="Search here"
-          className="w-full pl-9 pr-2 py-1 rounded-md outline-none"
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          onKeyDown={handleKeyDown}
         />
+      
         <SearchIcon
           size={18}
-          className="absolute left-2 top-1/2 -translate-y-1/2 text-gray-600"
+          className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-600 cursor-pointer"
+          onClick={handleSearch} // ✅ click support
         />
       </div>
 
@@ -54,7 +78,7 @@ const SideBarAll = () => {
         </div>
       </nav>
 
-      {/* Settings (Bottom) */}
+      {/* Settings */}
       <div className="mt-auto flex justify-end">
         <Settings2 className="cursor-pointer" />
       </div>

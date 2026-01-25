@@ -1,86 +1,73 @@
 "use client"
 
+import axios from "axios"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
+import { useEffect, useState } from "react"
 
 export default function Header() {
-    const router = useRouter()
-    return (
-        <div className="relative ">
-            <header
-                className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between
-                   px-6 py-3  shadow-md
-                   bg-gradient-to-r from-amber-200 via-red-200 to-pink-200 h-20">
+  const router = useRouter()
+  const [quantity, setQuantity] = useState(0)
 
-                {/* Left: Logo */}
-                <strong className="text-lg uppercase">
-                    
-                    <button 
-                    type="button"
-                    onClick={()=>router.push('/customer')}
-                    >
-                    kirana pasal</button>
-                </strong>
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await axios.get("http://localhost:4000/cart")
 
-                {/* Center: Navigation */}
-                <nav className="flex gap-6 font-medium">
+      const totalQuantity = res.data.reduce((sum, item) => {
+        return sum + Number(item.Quantity || 0)
+      }, 0)
+      console.log(res.data)
+      setQuantity(totalQuantity)
+      } catch (error) {
+        console.error(error)
+      }
+    }
 
-                    <Link href="/">Home</Link>
-                    <Link href="/products">Products</Link>
-                    <Link href="/about">About</Link>
-                    <Link href="/contact">Contact</Link>        
-                </nav>
+    fetchData()
+  }, [])
+ 
+  return (
+    <div className="relative">
+      <header
+        className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between
+        px-6 py-3 shadow-md
+        bg-gradient-to-r from-amber-200 via-red-200 to-pink-200 h-20"
+      >
+        {/* Logo */}
+        <strong className="text-lg uppercase">
+          <button onClick={() => router.push("/customer")}>
+            kirana pasal
+          </button>
+        </strong>
 
-                {/* Right: Settings + Cart */}
-                <div className="flex items-center gap-6">
+        {/* Navigation */}
+        <nav className="flex gap-6 font-medium">
+          <Link href="/">Home</Link>
+          <Link href="/products">Products</Link>
+          <Link href="/about">About</Link>
+          <Link href="/contact">Contact</Link>
+        </nav>
 
-                    {/* Settings Dropdown */}
-                    <div className="relative group">
-                        <button className="font-medium flex items-center gap-1">
-                            Settings
-                            <span className="text-sm">▾</span>
-                        </button>
+        {/* Right */}
+        <div className="flex items-center gap-6">
+          {/* Cart */}
+          <div className="relative cursor-pointer">
+            <Link href="/cart" className="font-medium">
+              Cart🛒
+            </Link>
 
-                        {/* Dropdown Menu */}
-                        <div
-                            className="absolute right-0 mt-2 w-40 bg-white rounded-md shadow-lg
-               opacity-0 invisible group-hover:opacity-100 group-hover:visible
-               transition-all duration-200"
-                        >
-                            <ul className="py-2 text-sm">
-                                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                                    Profile
-                                </li>
-                                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                                    Account
-                                </li>
-                                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                                    Logout
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-
-
-                    {/* Cart */}
-                    <div className="relative cursor-pointer">
-                        <Link href="/cart" className="font-medium">
-                            Cart🛒
-                        </Link>
-
-                        {/* Cart Count */}
-                        <span
-                            className="absolute -top-2 -right-2 bg-red-600 text-white text-xs
-                         px-2 py-0.5 rounded-full">
-                            0
-                        </span>
-                    </div>
-
-                </div>
-            </header>
-
-            {/* Spacer for fixed header */}
-            <div className="h-20"></div>
+            <span
+              className="absolute -top-2 -right-2 bg-red-600 text-white text-xs
+              px-2 py-0.5 rounded-full"
+            >
+              {quantity}
+            </span>
+          </div>
         </div>
-    )
+      </header>
+
+      <div className="h-20"></div>
+    </div>
+  )
 }
