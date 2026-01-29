@@ -66,7 +66,16 @@
       "password": "sdfvtttrrrb"
     }
   ],
-  "cart": [],
+  "cart": [
+    {
+      "id": "2fed",
+      "productId": "10",
+      "Title": "Cookies",
+      "Price": "50",
+      "Image": "https://unibicestore.com/cdn/shop/files/Unibic-Assorted-Cookies-pk-of-12-FOP.jpg?v=1701758621",
+      "Quantity": 2
+    }
+  ],
   "orders": [
     {
       "id": "a8ab",
@@ -95,6 +104,20 @@
       "total": 200,
       "status": "pending",
       "createdAt": "2026-01-26T08:52:11.340Z"
+    },
+    {
+      "id": "231f",
+      "customerName": "Ram Sharma",
+      "items": [
+        {
+          "name": "Cookies",
+          "qty": 5,
+          "price": "50"
+        }
+      ],
+      "total": 250,
+      "status": "pending",
+      "createdAt": "2026-01-29T12:48:43.575Z"
     }
   ]
 }
