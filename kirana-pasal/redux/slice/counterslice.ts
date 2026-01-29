@@ -1,28 +1,43 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-export const counterSlice = createSlice({
-  name: 'counter',
-  initialState: {
-    value: 0
-  },
+interface CounterState {
+  quantities: {
+    [productId: string]: number;
+  };
+}
+
+const initialState: CounterState = {
+  quantities: {},
+};
+
+const counterSlice = createSlice({
+  name: "counter",
+  initialState,
   reducers: {
-    increment: state => {
-      // Redux Toolkit allows us to write "mutating" logic in reducers. It
-      // doesn't actually mutate the state because it uses the Immer library,
-      // which detects changes to a "draft state" and produces a brand new
-      // immutable state based off those changes
-      state.value += 1
+    increment: (state, action: PayloadAction<string>) => {
+      const productId = action.payload;
+      state.quantities[productId] =
+        (state.quantities[productId] || 0) + 1;
     },
-    decrement: state => {
-      state.value -= 1
+
+    decrement: (state, action: PayloadAction<string>) => {
+      const productId = action.payload;
+      if (state.quantities[productId] > 0) {
+        state.quantities[productId] -= 1;
+      }
     },
-    incrementByAmount: (state, action) => {
-      state.value += action.payload
-    }
-  }
-})
 
-// Action creators are generated for each case reducer function
-export const { increment, decrement, incrementByAmount } = counterSlice.actions
+    setQuantity: (
+      state,
+      action: PayloadAction<{ productId: string; quantity: number }>
+    ) => {
+      const { productId, quantity } = action.payload;
+      state.quantities[productId] = quantity;
+    },
+  },
+});
 
-export default counterSlice.reducer
+export const { increment, decrement, setQuantity } =
+  counterSlice.actions;
+
+export default counterSlice.reducer;

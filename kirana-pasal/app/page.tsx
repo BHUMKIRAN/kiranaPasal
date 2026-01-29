@@ -21,7 +21,7 @@ const Home = () => {
   const [data, setData] = useState([]);
 
   //redux gobal 
-  const count = useSelector((state) => state.counter.value)
+  const count = useSelector((state) => state.counter.quantities)
   const dispatch = useDispatch()
 
   // Fetch products function
@@ -72,12 +72,14 @@ const Home = () => {
                   Price: ${item.Price}
                 </span>
                 <div className='flex justify-center gap-1 items-center'>
-                       <button className="flex bg-blue-300 rounded full p-2 h-5 w-7 justify-center items-center hover:bg-green-600" aria-label="Increment value" onClick={() => dispatch(increment())}>
-                  +
-                </button>
-                <span>{count}</span>
-                <button className="flex bg-blue-300 rounded full p-1 h-5 w-7 justify-center items-center hover:bg-red-600" aria-label="Decrement value" onClick={() => dispatch(decrement())}>
+                       <button className="flex bg-blue-300 rounded full p-2 h-5 w-7 justify-center items-center hover:bg-green-600" aria-label="Increment value" 
+                       onClick={() => dispatch(decrement(item.id))}>
                   -
+                </button>
+                <span>{count[item.id]}</span>
+                <button className="flex bg-blue-300 rounded full p-1 h-5 w-7 justify-center items-center hover:bg-red-600" aria-label="Decrement value" 
+                onClick={() => dispatch(increment(item.id))}>
+                  +
                 </button>
                 </div>
                
