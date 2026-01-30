@@ -1,7 +1,7 @@
 "use client";
 
-import { useSelector, useDispatch } from 'react-redux'
-import { increment , decrement , incrementByAmount} from '../redux/slice/counterslice'
+import { useSelector, useDispatch } from "react-redux";
+import { increment, decrement } from "../lib/features/box/boxSlice";
 import Header from "@/components/header/page";
 import SideBarAll from "@/components/sidebarall";
 import axios from "axios";
@@ -18,71 +18,104 @@ interface Product {
 
 const Home = () => {
   const router = useRouter();
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<Product[]>([]);
 
-  //redux gobal 
-  const count = useSelector((state) => state.counter.quantities)
-  const dispatch = useDispatch()
+  // redux global
+  const count = useSelector((state: any) => state.counter.quantities);
+  const dispatch = useDispatch();
 
-  // Fetch products function
+  // Fetch products
   const fetchProducts = async () => {
     const res = await axios.get("http://localhost:4000/products");
     setData(res.data);
   };
 
-  //useEffect runs once on component mount
+  // Place order
+  const handleOrder = async (item: Product) => {
+    const qty = count[item.id] || 0;
+
+    if (qty === 0) {
+      alert("Please add quantity first");
+      return;
+    }
+
+    const order = {
+      customerName: "LoginCustomerName",
+      items: [
+        {
+          productId: item.id,
+          name: item.Title,
+          qty,
+          price: item.Price,
+        },
+      ],
+      total: qty * item.Price,
+      status: "pending",
+      createdAt: new Date().toISOString(),
+    };
+
+    await axios.post("http://localhost:4000/orders", order);
+    alert(`Order for ${item.Title} placed successfully!`);
+  };
+
+  // Run once
   useEffect(() => {
     fetchProducts();
   }, []);
 
-
   return (
     <div>
-      {/* Header */}
       <Header />
 
-      {/* Page Body */}
       <div className="flex bg-gray-200 h-screen">
-        {/* Sidebar */}
-        <SideBarAll />       
+        <SideBarAll />
 
-        {/* Main Content */}
         <div className="flex-1 p-5">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
             {data.map((item) => (
               <div
                 key={item.id}
-                className="cursor-pointer bg-white border rounded-xl shadow-lg p-4 flex flex-col items-center hover:shadow-xl transition"
+                className="bg-white border rounded-xl shadow-lg p-4 flex flex-col items-center"
               >
-                <h2 className="font-semibold text-center mb-2">
-                  {item.Title}
-                </h2>
+                <h2 className="font-semibold mb-2">{item.Title}</h2>
 
-                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  className="rounded-lg shadow-md mb-3"
-                  src={item.Image || null}
+                  src={item.Image}
                   alt={item.Title}
                   width={200}
                   height={200}
+                  className="mb-3 cursor-pointer"
                   onClick={() => router.push(`/products/${item.id}`)}
                 />
 
                 <span className="font-bold text-green-600">
                   Price: ${item.Price}
                 </span>
-                <div className='flex justify-center gap-1 items-center'>
-                       <button className="flex bg-blue-300 rounded full p-2 h-5 w-7 justify-center items-center hover:bg-green-600" aria-label="Increment value" 
-                       onClick={() => dispatch(decrement(item.id))}>
-                  -
-                </button>
-                <span>{count[item.id]}</span>
-                <button className="flex bg-blue-300 rounded full p-1 h-5 w-7 justify-center items-center hover:bg-red-600" aria-label="Decrement value" 
-                onClick={() => dispatch(increment(item.id))}>
-                  +
-                </button>
+
+                <div className="flex gap-2 items-center mt-2">
+                  <button
+                    onClick={() => dispatch(decrement(item.id))}
+                    className="bg-blue-300 px-2 rounded"
+                  >
+                    -
+                  </button>
+
+                  <span>{count[item.id] || 0}</span>
+
+                  <button
+                    onClick={() => dispatch(increment(item.id))}
+                    className="bg-blue-300 px-2 rounded"
+                  >
+                    +
+                  </button>
                 </div>
-               
+
+                <button
+                  onClick={() => handleOrder(item)}
+                  className="bg-emerald-500 mt-3 px-4 py-1 rounded text-white"
+                >
+                  Order
+                </button>
               </div>
             ))}
           </div>
@@ -91,4 +124,5 @@ const Home = () => {
     </div>
   );
 };
+
 export default Home;
