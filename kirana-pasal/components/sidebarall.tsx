@@ -6,6 +6,9 @@ import {
   LayoutDashboard,
   BarChart3,
   Search,
+  ChartBarIcon,
+  ChartGanttIcon,
+  ChartAreaIcon,
 } from "lucide-react";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -43,18 +46,24 @@ const SideBarAll = () => {
 
       {/* Search */}
       <div className="relative mb-2">
-        <Input
-          placeholder="Search here"
+        <span>
+          ChatBot 🤖
+        </span>
+
+        
+ 
+        <textarea
+          placeholder="Ask bot something interesting "
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           onKeyDown={handleKeyDown}
+          className="h-30 bg-white  mt-2 rounded p-1 focus:bg-blue-300"
         />
-      
-        <SearchIcon
-          size={18}
-          className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-600 cursor-pointer"
+        <button
+          className="absolute right-7  bottom-2 text-gray-600 cursor-pointer
+          transition-all duration-200 active:scale-90 bg-blue-600 rounded text-white p-1"
           onClick={handleSearch} // ✅ click support
-        />
+        >Ask</button>
       </div>
 
       {/* Category */}

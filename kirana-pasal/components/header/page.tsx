@@ -47,8 +47,14 @@ export default function Header() {
           <Link href="/products">Products</Link>
           <Link href="/about">About</Link>
           <Link href="/contact">Contact</Link>
+          <div>
+          <input type="text" name="search" id="search" placeholder="Search anything here..."
+           className="border-2 border-amber-500 shadow-2xl  rounded-3xl px-2 py-1 transition-all duration-300 active:scale-105  hover:translate-x-5"/>
+        </div>
+
         </nav>
 
+        
         {/* Right */}
         <div className="flex items-center gap-6">
           {/* Cart */}
