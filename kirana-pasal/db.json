@@ -34,6 +34,13 @@
       "Image": "https://waiwai.com.np/wp-content/uploads/2023/05/Wai-Wai-Chicken-1-1.png",
       "Price": "20",
       "Category": "noodles"
+    },
+    {
+      "id": "3d3a",
+      "Title": "Furniture",
+      "Image": "https://www.lujoluxuryliving.com/cdn/shop/files/Image_5.jpg?crop=center&height=1200&v=1747656940&width=1200",
+      "Price": "500",
+      "Category": "furniture"
     }
   ],
   "users": [
@@ -64,9 +71,33 @@
       "email": "prakash@gmail.com",
       "phone": "3565653",
       "password": "sdfvtttrrrb"
+    },
+    {
+      "id": "f7c5",
+      "name": "ramm",
+      "email": "ramkuram@gmail.com",
+      "phone": "39503498",
+      "password": "tetertretre"
     }
   ],
-  "cart": [],
+  "cart": [
+    {
+      "id": "a87c",
+      "productId": "10",
+      "Title": "Cookies",
+      "Price": "50",
+      "Image": "https://unibicestore.com/cdn/shop/files/Unibic-Assorted-Cookies-pk-of-12-FOP.jpg?v=1701758621",
+      "Quantity": 1
+    },
+    {
+      "id": "ba69",
+      "productId": "3",
+      "Title": "Snickers",
+      "Price": "200",
+      "Image": "https://www.kroger.com/product/images/large/front/0004000020132",
+      "Quantity": 3
+    }
+  ],
   "orders": [
     {
       "id": "a8ab",
@@ -124,6 +155,21 @@
       "total": 400,
       "status": "pending",
       "createdAt": "2026-01-30T03:03:18.449Z"
+    },
+    {
+      "id": "9f14",
+      "customerName": "LoginCustomerName",
+      "items": [
+        {
+          "productId": "10",
+          "name": "Cookies",
+          "qty": 4,
+          "price": "50"
+        }
+      ],
+      "total": 200,
+      "status": "pending",
+      "createdAt": "2026-02-01T03:04:44.204Z"
     }
   ]
 }

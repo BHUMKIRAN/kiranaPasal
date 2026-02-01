@@ -1,43 +1,43 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface CounterState {
-  quantities: {
-    [productId: string]: number;
-  };
+  height: number;
+  width: number;
 }
 
 const initialState: CounterState = {
-  quantities: {},
-};
+  height: 0,
+  width: 0,
+};  
 
-const counterSlice = createSlice({
-  name: "counter",
+const lengthSlice = createSlice({
+  name: "length",
   initialState,
   reducers: {
-    increment: (state, action: PayloadAction<string>) => {
-      const productId = action.payload;
-      state.quantities[productId] =
-        (state.quantities[productId] || 0) + 1;
+    increaseHeight: (state ,  action : PayloadAction) => {
+      state.height += 10;
     },
-
-    decrement: (state, action: PayloadAction<string>) => {
-      const productId = action.payload;
-      if (state.quantities[productId] > 0) {
-        state.quantities[productId] -= 1;
+    decreaseHeight: (state ,  action : PayloadAction) => {
+      if (state.height > 0) {
+        state.height -= 5;
       }
     },
-
-    setQuantity: (
-      state,
-      action: PayloadAction<{ productId: string; quantity: number }>
-    ) => {
-      const { productId, quantity } = action.payload;
-      state.quantities[productId] = quantity;
+    increaseWidth: (state ,  action : PayloadAction) => {
+      state.width += 10;
+    },
+    decreaseWidth: (state ,  action : PayloadAction) => {
+      if (state.width > 0) {
+        state.width -= 5;
+      }
     },
   },
 });
 
-export const { increment, decrement, setQuantity } =
-  counterSlice.actions;
+export const {
+  increaseHeight,
+  decreaseHeight,
+  increaseWidth,
+  decreaseWidth,
+} = lengthSlice.actions;
 
-export default counterSlice.reducer;
+export default lengthSlice.reducer;

@@ -1,7 +1,7 @@
 "use client";
 
 import { useSelector, useDispatch } from "react-redux";
-import { increment, decrement } from "../lib/features/box/boxSlice";
+import { increment, decrement } from "../redux/slice/counterslice";
 import Header from "@/components/header/page";
 import SideBarAll from "@/components/sidebarall";
 import axios from "axios";
