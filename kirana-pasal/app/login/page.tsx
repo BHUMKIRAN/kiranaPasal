@@ -5,7 +5,7 @@ import { Formik, Form, Field, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../redux/store'
-import { loginSucess , logout } from '@/redux/slices/authSlice'
+import { loginSucess, logout } from '@/redux/slices/authSlice'
 
 const Login = () => {
   const router = useRouter()
@@ -31,15 +31,15 @@ const Login = () => {
         const token = `token_${Date.now()}`
 
         // ✅ SAVE TO REDUX
-       dispatch(
-  loginSucess({
-    token: token,
-    user: {
-      id: foundUser.id,
-      name: foundUser.name,
-    },
-  })
-)
+        dispatch(
+          loginSucess({
+            token: token,
+            user: {
+              id: foundUser.id,
+              name: foundUser.name,
+            },
+          })
+        )
         alert(`Login successful! Welcome ${foundUser.name}`)
         router.push('/customer')
       } else {

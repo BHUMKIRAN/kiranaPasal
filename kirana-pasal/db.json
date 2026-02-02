@@ -80,24 +80,7 @@
       "password": "tetertretre"
     }
   ],
-  "cart": [
-    {
-      "id": "a87c",
-      "productId": "10",
-      "Title": "Cookies",
-      "Price": "50",
-      "Image": "https://unibicestore.com/cdn/shop/files/Unibic-Assorted-Cookies-pk-of-12-FOP.jpg?v=1701758621",
-      "Quantity": 1
-    },
-    {
-      "id": "ba69",
-      "productId": "3",
-      "Title": "Snickers",
-      "Price": "200",
-      "Image": "https://www.kroger.com/product/images/large/front/0004000020132",
-      "Quantity": 3
-    }
-  ],
+  "cart": [],
   "orders": [
     {
       "id": "a8ab",

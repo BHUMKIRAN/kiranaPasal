@@ -68,7 +68,6 @@ const Home = () => {
   return (
     <div>
       <Header />
-
       <div className="flex bg-gray-200 h-screen">
         <SideBarAll />
 
