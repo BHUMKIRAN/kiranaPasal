@@ -1,17 +1,16 @@
 'use client'
 
-import React from 'react'
 import { useRouter } from 'next/navigation'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
 import { useDispatch, useSelector } from 'react-redux'
-import { setUser } from '@/lib/features/user/user'
 import { RootState } from '../../redux/store'
+import { loginSucess , logout } from '@/redux/slices/authSlice'
 
 const Login = () => {
   const router = useRouter()
   const dispatch = useDispatch()
-  const user = useSelector((state: RootState) => state.user)
+  const authuUser = useSelector((state: RootState) => state.auth)
 
   const validationSchema = Yup.object({
     email: Yup.string().email('Invalid email').required('Email required'),
@@ -32,13 +31,15 @@ const Login = () => {
         const token = `token_${Date.now()}`
 
         // ✅ SAVE TO REDUX
-        dispatch(
-          setUser({
-            name: foundUser.name,
-            token: token,
-          })
-        )
-
+       dispatch(
+  loginSucess({
+    token: token,
+    user: {
+      id: foundUser.id,
+      name: foundUser.name,
+    },
+  })
+)
         alert(`Login successful! Welcome ${foundUser.name}`)
         router.push('/customer')
       } else {
