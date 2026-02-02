@@ -30,6 +30,7 @@
     "react-dom": "19.2.3",
     "react-redux": "^9.2.0",
     "recharts": "^2.15.4",
+    "redux-persist": "^6.0.0",
     "rxjs": "^7.8.2",
     "tailwind-merge": "^3.4.0",
     "yup": "^1.7.1"

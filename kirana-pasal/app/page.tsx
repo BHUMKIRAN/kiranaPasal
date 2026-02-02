@@ -19,10 +19,15 @@ interface Product {
 const Home = () => {
   const router = useRouter();
   const [data, setData] = useState<Product[]>([]);
+  const [sidebarOpen , setSidebarOpen] = useState(false)
 
   // redux global
   const count = useSelector((state: any) => state.counter.quantities);
   const dispatch = useDispatch();
+
+  const handleSidebarToggle =()=>{
+    setSidebarOpen(prev=>!prev)
+  }
 
   // Fetch products
   const fetchProducts = async () => {
@@ -65,10 +70,27 @@ const Home = () => {
 
   return (
     <div>
-      <Header />
+       {/* Header with toggle button */}
+     <Header/>
+        <button
+          onClick={handleSidebarToggle}
+          className="text-xl px-3 py-1 bg-gray-800 text-white rounded"
+        >
+          ☰
+        </button>
+      
 
-      <div className="flex bg-gray-200 h-screen">
-        <SideBarAll />
+      {/* Overlay */}
+      {sidebarOpen && (
+        <div
+          onClick={handleSidebarToggle}
+          className="fixed inset-0 bg-black/40 z-40"
+        />
+      )}
+
+      <div className="flex bg-gray-200 h-screen relative overflow-hidden">
+        {/* Sidebar */}
+        <SideBarAll isOpen={sidebarOpen} onClose={handleSidebarToggle} />
 
         <div className="flex-1 p-5">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
