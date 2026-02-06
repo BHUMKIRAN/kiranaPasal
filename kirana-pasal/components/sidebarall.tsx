@@ -1,69 +1,79 @@
 "use client";
 
 import {
-  SearchIcon,
   Settings2,
   LayoutDashboard,
   BarChart3,
-  Search,
-  ChartBarIcon,
-  ChartGanttIcon,
-  ChartAreaIcon,
 } from "lucide-react";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Input } from "./ui/input";
 
-const SideBarAll = () => {
+interface SidebarProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+const SideBarAll = ({ isOpen, onClose }: SidebarProps) => {
   const router = useRouter();
-  const [message, setMessage] = useState(""); // ✅ string
+  const [message, setMessage] = useState("");
 
   const handleSearch = () => {
     if (!message.trim()) return;
-
     router.push(`/chat?q=${encodeURIComponent(message)}`);
-
     setMessage("");
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter") {
+      e.preventDefault();
       handleSearch();
     }
   };
 
   return (
-    <aside className="flex flex-col justify-center w-56 bg-gray-400 p-4 shadow-xl rounded">
-      <div>
+    <aside
+      className={`
+        fixed top-0 left-0 h-full w-56 bg-gray-400 p-4 shadow-xl z-50
+        transform transition-transform duration-300 ease-in-out
+        ${isOpen ? "translate-x-0" : "-translate-x-full"}
+      `}
+    >
+      {/* Close button */}
+      <button
+        onClick={onClose}
+        className="absolute top-4 right-4 text-xl"
+      >
+        ✕
+      </button>
+
+      <div className="mt-10">
         <img
           src="/Logo.png"
           alt="Logo"
-          className="rounded-[50%] mb-4 w-25 h-25"
+          className="rounded-full mb-4 w-24 h-24 mx-auto"
         />
       </div>
 
       <hr className="border-2 border-black mb-4" />
 
-      {/* Search */}
+      {/* Chat */}
       <div className="relative mb-2">
-        <span>
-          ChatBot 🤖
-        </span>
+        <span>ChatBot 🤖</span>
 
-        
- 
         <textarea
-          placeholder="Ask bot something interesting "
+          placeholder="Ask bot something interesting"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           onKeyDown={handleKeyDown}
-          className="h-30 bg-white  mt-2 rounded p-1 focus:bg-blue-300"
+          className="h-24 bg-white mt-2 rounded p-2 w-full focus:bg-blue-300"
         />
+
         <button
-          className="absolute right-7  bottom-2 text-gray-600 cursor-pointer
-          transition-all duration-200 active:scale-90 bg-blue-600 rounded text-white p-1"
-          onClick={handleSearch} // ✅ click support
-        >Ask</button>
+          onClick={handleSearch}
+          className="absolute right-2 bottom-2 bg-blue-600 text-white px-2 py-1 rounded active:scale-90"
+        >
+          Ask
+        </button>
       </div>
 
       {/* Category */}

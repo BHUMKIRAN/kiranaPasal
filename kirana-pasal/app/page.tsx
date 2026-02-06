@@ -18,21 +18,26 @@ interface Product {
 
 const Home = () => {
   const router = useRouter();
-  const [data, setData] = useState<Product[]>([]);
-  const [sidebarOpen , setSidebarOpen] = useState(false)
-
-  // redux global
-  const count = useSelector((state: any) => state.counter.quantities);
   const dispatch = useDispatch();
 
-  const handleSidebarToggle =()=>{
-    setSidebarOpen(prev=>!prev)
-  }
+  const [data, setData] = useState<Product[]>([]);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  // Redux state
+  const count = useSelector((state: any) => state.counter.quantities);
+
+  const handleSidebarToggle = () => {
+    setSidebarOpen((prev) => !prev);
+  };
 
   // Fetch products
   const fetchProducts = async () => {
-    const res = await axios.get("http://localhost:4000/products");
-    setData(res.data);
+    try {
+      const res = await axios.get("http://localhost:4000/products");
+      setData(res.data);
+    } catch (error) {
+      console.error("Failed to fetch products", error);
+    }
   };
 
   // Place order
@@ -59,26 +64,30 @@ const Home = () => {
       createdAt: new Date().toISOString(),
     };
 
-    await axios.post("http://localhost:4000/orders", order);
-    alert(`Order for ${item.Title} placed successfully!`);
+    try {
+      await axios.post("http://localhost:4000/orders", order);
+      alert(`Order for ${item.Title} placed successfully!`);
+    } catch (error) {
+      console.error("Order failed", error);
+    }
   };
 
-  // Run once
   useEffect(() => {
     fetchProducts();
   }, []);
 
   return (
     <div>
-       {/* Header with toggle button */}
-     <Header/>
-        <button
-          onClick={handleSidebarToggle}
-          className="text-xl px-3 py-1 bg-gray-800 text-white rounded"
-        >
-          ☰
-        </button>
-      
+      {/* Header */}
+      <Header />
+
+      {/* Toggle Button */}
+      <button
+        onClick={handleSidebarToggle}
+        className="fixed z-50 cursor-pointer text-black px-3 py-1 rounded"
+      >
+        ☰
+      </button>
 
       {/* Overlay */}
       {sidebarOpen && (
@@ -88,11 +97,12 @@ const Home = () => {
         />
       )}
 
-      <div className="flex bg-gray-200 h-screen relative overflow-hidden">
+      <div className="flex bg-gray-200 h-screen overflow-y-auto">
         {/* Sidebar */}
         <SideBarAll isOpen={sidebarOpen} onClose={handleSidebarToggle} />
 
-        <div className="flex-1 p-5">
+        {/* Main Content */}
+        <div className="flex-1 p-5 z-10">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
             {data.map((item) => (
               <div

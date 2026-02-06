@@ -69,9 +69,8 @@ const Home = () => {
     <div>
       <Header />
       <div className="flex bg-gray-200 h-screen">
-        <SideBarAll />
-
-        <div className="flex-1 p-5 overflow-y-auto">
+      <SideBarAll />
+      <div className="flex-1 p-5 overflow-y-auto">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
             {data.map((item) => (
               <div
