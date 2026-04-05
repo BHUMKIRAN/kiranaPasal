@@ -1,13 +1,6 @@
 {
   "products": [
     {
-      "Title": "Cookies",
-      "Price": "50",
-      "Category": "biscuits",
-      "Image": "https://unibicestore.com/cdn/shop/files/Unibic-Assorted-Cookies-pk-of-12-FOP.jpg?v=1701758621",
-      "id": "10"
-    },
-    {
       "Title": "Snickers",
       "Price": "200",
       "Category": "chocolate",
@@ -20,13 +13,6 @@
       "Image": "https://www.khadyanna.com/storage/products/2023/March/02/312270146_572252101566643_2170303262212906217_n_1677739349.jpg",
       "Price": "200",
       "Category": "Masala"
-    },
-    {
-      "id": "c463",
-      "Title": "Chauchau",
-      "Image": "https://img.drz.lazcdn.com/static/np/p/62e97d6e9a9a6a858bff5f9b033744e0.jpg_720x720q80.jpg",
-      "Price": "20",
-      "Category": "noodles"
     },
     {
       "id": "e29f",
@@ -80,7 +66,16 @@
       "password": "tetertretre"
     }
   ],
-  "cart": [],
+  "cart": [
+    {
+      "id": "2def",
+      "productId": "5",
+      "Title": "Meat Masala",
+      "Price": "200",
+      "Image": "https://www.khadyanna.com/storage/products/2023/March/02/312270146_572252101566643_2170303262212906217_n_1677739349.jpg",
+      "Quantity": 1
+    }
+  ],
   "orders": [
     {
       "id": "a8ab",
@@ -136,7 +131,7 @@
         }
       ],
       "total": 400,
-      "status": "pending",
+      "status": "processing",
       "createdAt": "2026-01-30T03:03:18.449Z"
     },
     {
@@ -153,6 +148,122 @@
       "total": 200,
       "status": "pending",
       "createdAt": "2026-02-01T03:04:44.204Z"
+    },
+    {
+      "id": "f04a",
+      "customerName": "LoginCustomerName",
+      "items": [
+        {
+          "productId": "10",
+          "name": "Cookies",
+          "qty": 4,
+          "price": "50"
+        }
+      ],
+      "total": 200,
+      "status": "confirmed",
+      "createdAt": "2026-02-20T03:57:43.979Z"
+    },
+    {
+      "id": "bacf",
+      "customerName": "Ram Sharma",
+      "items": [
+        {
+          "name": "Meat Masala",
+          "qty": 6,
+          "price": "200"
+        }
+      ],
+      "total": 1200,
+      "status": "pending",
+      "createdAt": "2026-02-20T04:00:34.429Z"
+    },
+    {
+      "id": "98f1",
+      "customerName": "Ram Sharma",
+      "items": [
+        {
+          "name": "Snickers",
+          "qty": 5,
+          "price": "200"
+        }
+      ],
+      "total": 1000,
+      "status": "pending",
+      "createdAt": "2026-02-20T04:00:46.044Z"
+    },
+    {
+      "id": "9b54",
+      "customerName": "LoginCustomerName",
+      "items": [
+        {
+          "productId": "5",
+          "name": "Meat Masala",
+          "qty": 4,
+          "price": "200"
+        }
+      ],
+      "total": 800,
+      "status": "pending",
+      "createdAt": "2026-02-20T04:00:56.713Z"
+    },
+    {
+      "id": "80e0",
+      "customerName": "LoginCustomerName",
+      "items": [
+        {
+          "productId": "3",
+          "name": "Snickers",
+          "qty": 7,
+          "price": "200"
+        }
+      ],
+      "total": 1400,
+      "status": "processing",
+      "createdAt": "2026-03-03T03:17:24.600Z"
+    },
+    {
+      "id": "7880",
+      "customerName": "Ram Sharma",
+      "items": [
+        {
+          "name": "Snickers",
+          "qty": 5,
+          "price": "200"
+        }
+      ],
+      "total": 1000,
+      "status": "pending",
+      "createdAt": "2026-03-16T17:01:16.589Z"
+    },
+    {
+      "id": "34cc",
+      "customerName": "Ram Sharma",
+      "items": [
+        {
+          "name": "Meat Masala",
+          "qty": 5,
+          "price": "200"
+        }
+      ],
+      "total": 1000,
+      "status": "pending",
+      "createdAt": "2026-03-16T17:01:25.453Z"
+    },
+    {
+      "id": "0d3d",
+      "customerName": "LoginCustomerName",
+      "items": [
+        {
+          "productId": "3",
+          "name": "Snickers",
+          "qty": 4,
+          "price": "200"
+        }
+      ],
+      "total": 800,
+      "status": "pending",
+      "createdAt": "2026-03-16T17:01:35.557Z"
     }
   ]
 }
