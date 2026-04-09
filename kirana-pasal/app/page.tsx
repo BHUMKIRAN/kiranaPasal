@@ -6,7 +6,7 @@ import Header from "@/components/header/page";
 import SideBarAll from "@/components/sidebarall";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 interface Product {
   id: number;
@@ -21,16 +21,36 @@ const Home = () => {
   const dispatch = useDispatch();
 
   const [data, setData] = useState<Product[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const [menuOpen, setMenuOpen] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  // Redux state
+  const itemsPerPage = 10;
   const count = useSelector((state: any) => state.counter.quantities);
 
-  const handleSidebarToggle = () => {
-    setSidebarOpen((prev) => !prev);
+  // detect screen
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const handleHamburger = () => {
+    if (isMobile) {
+      setMenuOpen(!menuOpen);
+    } else {
+      setSidebarOpen(!sidebarOpen);
+    }
   };
 
-  // Fetch products
   const fetchProducts = async () => {
     try {
       const res = await axios.get("http://localhost:4000/products");
@@ -40,7 +60,10 @@ const Home = () => {
     }
   };
 
-  // Place order
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
   const handleOrder = async (item: Product) => {
     const qty = count[item.id] || 0;
 
@@ -72,85 +95,152 @@ const Home = () => {
     }
   };
 
-  useEffect(() => {
-    fetchProducts();
-  }, []);
+  // Search
+  const filteredProducts = useMemo(
+    () =>
+      data.filter((item) =>
+        item.Title.toLowerCase().includes(searchQuery.toLowerCase())
+      ),
+    [data, searchQuery]
+  );
+
+  // Pagination
+  const paginatedData = useMemo(() => {
+    const start = (currentPage - 1) * itemsPerPage;
+    const end = currentPage * itemsPerPage;
+    return filteredProducts.slice(start, end);
+  }, [filteredProducts, currentPage]);
+
+  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
 
   return (
-    <div>
-      {/* Header */}
+    <div className="min-h-screen bg-slate-100">
       <Header />
 
-      {/* Toggle Button */}
-      <button
-        onClick={handleSidebarToggle}
-        className="fixed z-50 cursor-pointer text-black px-3 py-1 rounded"
+      {/* Sidebar for desktop */}
+      <SideBarAll
+        isOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+      />
+
+      <div
+        className={`px-5 pt-6 transition-all duration-300 ${
+          sidebarOpen ? "md:ml-72" : ""
+        }`}
       >
-        ☰
-      </button>
+        <div className="mx-auto max-w-6xl">
 
-      {/* Overlay */}
-      {sidebarOpen && (
-        <div
-          onClick={handleSidebarToggle}
-          className="fixed inset-0 bg-black/40 z-40"
-        />
-      )}
+          {/* Hamburger + Search */}
+          <div className="flex items-center gap-3 mb-6">
+            <button
+              onClick={handleHamburger}
+              className={`rounded-lg bg-slate-900 text-white px-4 py-2 ${sidebarOpen ? "hidden" : ""}`}
+            >
+              ☰
+            </button>
 
-      <div className="flex bg-gray-200 h-screen overflow-y-auto">
-        {/* Sidebar */}
-        <SideBarAll isOpen={sidebarOpen} onClose={handleSidebarToggle} />
+            <input
+              type="search"
+              value={searchQuery}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                setCurrentPage(1);
+              }}
+              placeholder="Search products..."
+              className="flex-1 rounded-3xl border border-slate-300 bg-white px-5 py-3 shadow-sm"
+            />
+          </div>
 
-        {/* Main Content */}
-        <div className="flex-1 p-5 z-10">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-            {data.map((item) => (
-              <div
-                key={item.id}
-                className="bg-white border rounded-xl shadow-lg p-4 flex flex-col items-center"
-              >
-                <h2 className="font-semibold mb-2">{item.Title}</h2>
+          {/* Mobile dropdown menu */}
+          {menuOpen && isMobile && (
+            <div className="mb-6 rounded-xl bg-white shadow-md p-4 flex flex-col gap-2">
+              <button onClick={() => router.push("/")}>Home</button>
+              <button onClick={() => router.push("/products")}>Products</button>
+              <button onClick={() => router.push("/about")}>About</button>
+              <button onClick={() => router.push("/contact")}>Contact</button>
+            </div>
+          )}
 
-                <img
-                  src={item.Image}
-                  alt={item.Title}
-                  width={200}
-                  height={200}
-                  className="mb-3 cursor-pointer"
-                  onClick={() => router.push(`/products/${item.id}`)}
-                />
-
-                <span className="font-bold text-green-600">
-                  Price: ${item.Price}
-                </span>
-
-                <div className="flex gap-2 items-center mt-2">
-                  <button
-                    onClick={() => dispatch(decrement(item.id))}
-                    className="bg-blue-300 px-2 rounded"
+          {filteredProducts.length === 0 ? (
+            <div className="rounded-3xl border border-dashed bg-white p-10 text-center">
+              No products found matching "{searchQuery}".
+            </div>
+          ) : (
+            <>
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                {paginatedData.map((item) => (
+                  <div
+                    key={item.id}
+                    className="rounded-3xl border bg-white p-5 shadow-sm"
                   >
-                    -
-                  </button>
+                    <h2 className="text-lg font-semibold mb-3">
+                      {item.Title}
+                    </h2>
 
-                  <span>{count[item.id] || 0}</span>
+                    <img
+                      src={item.Image}
+                      className="mb-4 h-48 w-full object-cover rounded-3xl cursor-pointer"
+                      onClick={() => router.push(`/products/${item.id}`)}
+                    />
 
+                    <p className="mb-4">Price: ${item.Price}</p>
+
+                    <div className="flex justify-between mb-4">
+                      <button onClick={() => dispatch(decrement(item.id))}>
+                        -
+                      </button>
+
+                      <span>{count[item.id] || 0}</span>
+
+                      <button onClick={() => dispatch(increment(item.id))}>
+                        +
+                      </button>
+                    </div>
+
+                    <button
+                      onClick={() => handleOrder(item)}
+                      className="w-full bg-slate-900 text-white py-2 rounded"
+                    >
+                      Order
+                    </button>
+                  </div>
+                ))}
+              </div>
+
+              {/* Pagination */}
+              <div className="flex justify-center mt-8 gap-2">
+                <button
+                  disabled={currentPage === 1}
+                  onClick={() => setCurrentPage((prev) => prev - 1)}
+                  className="px-4 py-2 bg-slate-200 rounded"
+                >
+                  Prev
+                </button>
+
+                {[...Array(totalPages)].map((_, index) => (
                   <button
-                    onClick={() => dispatch(increment(item.id))}
-                    className="bg-blue-300 px-2 rounded"
+                    key={index}
+                    onClick={() => setCurrentPage(index + 1)}
+                    className={`px-4 py-2 rounded ${
+                      currentPage === index + 1
+                        ? "bg-slate-900 text-white"
+                        : "bg-slate-200"
+                    }`}
                   >
-                    +
+                    {index + 1}
                   </button>
-                </div>
+                ))}
 
                 <button
-                  onClick={() => handleOrder(item)}
-                  className="bg-emerald-500 mt-3 px-4 py-1 rounded text-white"
+                  disabled={currentPage === totalPages}
+                  onClick={() => setCurrentPage((prev) => prev + 1)}
+                  className="px-4 py-2 bg-slate-200 rounded"
                 >
-                  Order
+                  Next
                 </button>
               </div>
-            ))}
-          </div>
+            </>
+          )}
         </div>
       </div>
     </div>

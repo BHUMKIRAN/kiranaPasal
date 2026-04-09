@@ -38,8 +38,11 @@ const Login = () => {
               id: foundUser.id,
               name: foundUser.name,
             },
+            loggedIN: true,
           })
         )
+
+        document.cookie = `kirana_auth=true; path=/; max-age=${60 * 60 * 24}`;
         alert(`Login successful! Welcome ${foundUser.name}`)
         router.push('/customer')
       } else {
