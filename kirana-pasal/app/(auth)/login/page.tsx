@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
 import { useDispatch, useSelector } from 'react-redux'
-import { RootState } from '../../redux/store'
+import { RootState } from '../../../redux/store'
 import { loginSucess, logout } from '@/redux/slices/authSlice'
 
 const Login = () => {
