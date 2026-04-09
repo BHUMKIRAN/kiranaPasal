@@ -1,110 +1,148 @@
 'use client'
 import React, { useEffect, useState } from 'react'
-import { Formik, Form, Field, ErrorMessage } from 'formik'
-import * as Yup from 'yup'
+import { useForm, Controller } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import * as z from 'zod'
 import axios from 'axios'
-import { useParams, useRouter } from 'next/navigation'
+import { useRouter, useParams } from 'next/navigation'
+import { Button } from '@/components/ui/button'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from '@/components/ui/field'
+import { Input } from '@/components/ui/input'
+import { toast } from 'sonner'
 
-const ResetPassword = () => {
+// 1️⃣ Zod schema
+const resetSchema = z.object({
+  oldPassword: z.string(),
+  newPassword: z.string().min(6, 'Min 6 characters'),
+  confirmNewPassword: z.string().min(6, 'Min 6 characters'),
+}).refine((data) => data.newPassword === data.confirmNewPassword, {
+  message: 'Passwords must match',
+  path: ['confirmNewPassword'],
+})
+
+export default function ResetPassword() {
   const router = useRouter()
   const { id } = useParams()
-
   const [user, setUser] = useState<any>(null)
 
-  const validationSchema = Yup.object({
-    newPassword: Yup.string().min(6, 'Min 6 chars').required('New password required'),
-    confirmNewPassword: Yup.string()
-      .oneOf([Yup.ref('newPassword')], 'Passwords must match')
-      .required('Confirm password required')
+  const form = useForm<z.infer<typeof resetSchema>>({
+    resolver: zodResolver(resetSchema),
+    defaultValues: {
+      oldPassword: '',
+      newPassword: '',
+      confirmNewPassword: '',
+    },
   })
 
-  // Fetch user by ID
+  // Fetch user
   useEffect(() => {
     const fetchUser = async () => {
-      const { data } = await axios.get(`http://localhost:4000/users/${id}`)
-      setUser(data)
+      try {
+        const { data } = await axios.get(`http://localhost:4000/users/${id}`)
+        setUser(data)
+        // Set oldPassword field
+        form.reset({
+          oldPassword: data.password,
+          newPassword: '',
+          confirmNewPassword: '',
+        })
+      } catch (err) {
+        console.error(err)
+        toast.error('Failed to fetch user')
+      }
     }
     fetchUser()
   }, [id])
 
-  const handleSubmit = async (values: any, { setSubmitting }: any) => {
-    await axios.put(`http://localhost:4000/users/${id}`, {
-      ...user,
-      password: values.newPassword
-    })
-
-    alert('Password successfully changed!')
-    setSubmitting(false)
-    router.push('/login')
+  const onSubmit = async (values: z.infer<typeof resetSchema>) => {
+    try {
+      if (!user) return
+      await axios.put(`http://localhost:4000/users/${id}`, {
+        ...user,
+        password: values.newPassword,
+      })
+      toast.success('Password successfully updated!')
+      router.push('/login')
+    } catch (err) {
+      console.error(err)
+      toast.error('Failed to update password')
+    }
   }
 
   if (!user) return <p className="text-center mt-10">Loading...</p>
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
-      <div className="bg-white w-80 p-6 rounded-xl shadow-lg space-y-4">
-        <h1 className="text-xl font-bold text-center uppercase">Reset Password</h1>
+      <Card className="w-full sm:max-w-md">
+        <CardHeader>
+          <CardTitle className="text-center uppercase">Reset Password</CardTitle>
+          <CardDescription className="text-center">
+            Change your account password
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={form.handleSubmit(onSubmit)}>
+            <FieldGroup>
+              {/* Old Password */}
+              <Controller
+                name="oldPassword"
+                control={form.control}
+                render={({ field }) => (
+                  <Field>
+                    <FieldLabel>Old Password</FieldLabel>
+                    <Input {...field} readOnly className="bg-gray-100" />
+                  </Field>
+                )}
+              />
 
-        <Formik
-          initialValues={{
-            oldPassword: user.password,
-            newPassword: '',
-            confirmNewPassword: ''
-          }}
-          validationSchema={validationSchema}
-          onSubmit={handleSubmit}
-          enableReinitialize
-        >
-          {({ isSubmitting }) => (
-            <Form className="space-y-3">
+              {/* New Password */}
+              <Controller
+                name="newPassword"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel>New Password</FieldLabel>
+                    <Input {...field} type="password" placeholder="New password" />
+                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                  </Field>
+                )}
+              />
 
-              {/* OLD PASSWORD */}
-              <div>
-                <label className="font-medium">Old Password</label>
-                <Field
-                  type="text"
-                  name="oldPassword"
-                  readOnly
-                  className="w-full border rounded p-2 bg-gray-100"
-                />
-              </div>
+              {/* Confirm New Password */}
+              <Controller
+                name="confirmNewPassword"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel>Confirm Password</FieldLabel>
+                    <Input {...field} type="password" placeholder="Confirm password" />
+                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                  </Field>
+                )}
+              />
+            </FieldGroup>
 
-              {/* NEW PASSWORD */}
-              <div>
-                <label className="font-medium">New Password</label>
-                <Field
-                  type="password"
-                  name="newPassword"
-                  className="w-full border rounded p-2"
-                />
-                <ErrorMessage name="newPassword" component="div" className="text-red-500 text-sm" />
-              </div>
-
-              {/* CONFIRM PASSWORD */}
-              <div>
-                <label className="font-medium">Confirm Password</label>
-                <Field
-                  type="password"
-                  name="confirmNewPassword"
-                  className="w-full border rounded p-2"
-                />
-                <ErrorMessage name="confirmNewPassword" component="div" className="text-red-500 text-sm" />
-              </div>
-
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full py-2 bg-blue-500 text-white rounded font-semibold"
-              >
-                {isSubmitting ? 'Updating...' : 'Reset Password'}
-              </button>
-
-            </Form>
-          )}
-        </Formik>
-      </div>
+            <CardFooter>
+              <Button type="submit" className="w-full mt-2">
+                Reset Password
+              </Button>
+            </CardFooter>
+          </form>
+        </CardContent>
+      </Card>
     </div>
   )
 }
-
-export default ResetPassword

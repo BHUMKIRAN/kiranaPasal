@@ -1,104 +1,158 @@
-'use client'
-import React from 'react'
-import { Formik, Form, Field, ErrorMessage } from 'formik'
-import * as Yup from 'yup'
-import axios from 'axios'
-import { useRouter } from 'next/navigation'
+"use client"
 
-const Register = () => {
+import * as React from "react"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { Controller, useForm } from "react-hook-form"
+import { toast } from "sonner"
 
-  const router = useRouter()
-  const validationSchema = Yup.object({
-    name: Yup.string()
-      .min(3, 'Min 3 characters')
-      .required('Name required'),
+import { Button } from "@/components/ui/button"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field"
+import { Input } from "@/components/ui/input"
+import { z } from "zod"
+import axios from "axios"
 
-    email: Yup.string()
-      .email('Invalid email')
-      .required('Email required'),
+// 1️⃣ Zod schema
+const registerSchema = z.object({
+  name: z
+    .string()
+    .min(3, "Name must be at least 3 characters")
+    .max(32, "Name must be at most 32 characters"),
+  email: z
+    .string()
+    .min(5, "Email must be at least 5 characters")
+    .max(64, "Email must be at most 64 characters")
+    .email("Invalid email address"),
+  password: z
+    .string()
+    .min(6, "Password must be at least 6 characters")
+    .max(32, "Password must be at most 32 characters"),
+})
 
-    phone: Yup.string()
-      .required('Phone required'),
-
-    password: Yup.string()
-      .min(6, 'Min 6 characters')
-      .required('Password required'),
+export default function RegisterForm() {
+  const form = useForm<z.infer<typeof registerSchema>>({
+    resolver: zodResolver(registerSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      password: "",
+    },
   })
 
-  const initialValues = {
-    name: '',
-    email: '',
-    phone: '',
-    password: '',
-  }
-
-  const handleSubmit = async (values, { resetForm }) => {
+  // 2️⃣ Handle form submit
+  const onSubmit = async (data: z.infer<typeof registerSchema>) => {
     try {
-      await axios.post('http://localhost:4000/users', values)
-      alert('User registered successfully')
-      router.push('/customer')
-    } catch (error) {
-      console.error(error)
-      alert('Registration failed')
+      // Post data to backend
+      const res = await axios.post("http://localhost:4000/users", data)
+      console.log(res.data)
+
+      toast.success("Registration successful!", {
+        description: (
+          <pre className="mt-2 w-[320px] overflow-x-auto rounded-md bg-code p-4 text-code-foreground">
+            <code>{JSON.stringify(res.data, null, 2)}</code>
+          </pre>
+        ),
+        position: "bottom-right",
+      })
+
+      form.reset()
+    } catch (err) {
+      console.error(err)
+      toast.error("Registration failed. Try again!")
     }
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-100">
-      <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-lg">
-        <h2 className="mb-4 text-center text-2xl font-bold">Register</h2>
-
-        <Formik
-          initialValues={initialValues}
-          validationSchema={validationSchema}
-          onSubmit={handleSubmit}
-        >
-          <Form className="space-y-4">
-            <div>
-              <Field
+    <div className="flex justify-center mt-20">
+      <Card className="w-full sm:max-w-md">
+        <CardHeader>
+          <CardTitle>Register</CardTitle>
+          <CardDescription>Create a new account</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form id="register-form" onSubmit={form.handleSubmit(onSubmit)}>
+            <FieldGroup>
+              {/* Name Field */}
+              <Controller
                 name="name"
-                placeholder="Name"
-                className="w-full rounded-lg border px-4 py-2"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="register-name">Name</FieldLabel>
+                    <Input
+                      {...field}
+                      id="register-name"
+                      placeholder="Your full name"
+                      aria-invalid={fieldState.invalid}
+                    />
+                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                  </Field>
+                )}
               />
-              <ErrorMessage name="name" component="p" className="text-sm text-red-500" />
-            </div>
-            <div>
-              <Field
+
+              {/* Email Field */}
+              <Controller
                 name="email"
-                type="email"
-                placeholder="Email"
-                className="w-full rounded-lg border px-4 py-2"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="register-email">Email</FieldLabel>
+                    <Input
+                      {...field}
+                      id="register-email"
+                      placeholder="you@example.com"
+                      type="email"
+                      aria-invalid={fieldState.invalid}
+                    />
+                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                  </Field>
+                )}
               />
-              <ErrorMessage name="email" component="p" className="text-sm text-red-500" />
-            </div>
-            <div>
-              <Field
-                name="phone"
-                placeholder="Phone"
-                className="w-full rounded-lg border px-4 py-2"
-              />
-              <ErrorMessage name="phone" component="p" className="text-sm text-red-500" />
-            </div>
-            <div>
-              <Field
+
+              {/* Password Field */}
+              <Controller
                 name="password"
-                type="password"
-                placeholder="Password"
-                className="w-full rounded-lg border px-4 py-2"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="register-password">Password</FieldLabel>
+                    <Input
+                      {...field}
+                      id="register-password"
+                      placeholder="********"
+                      type="password"
+                      aria-invalid={fieldState.invalid}
+                    />
+                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                  </Field>
+                )}
               />
-              <ErrorMessage name="password" component="p" className="text-sm text-red-500" />
-            </div>
-            <button
-              type="submit"
-              className="w-full rounded-lg bg-indigo-600 py-2 font-semibold text-white hover:bg-indigo-700"
-            >
+            </FieldGroup>
+          </form>
+        </CardContent>
+        <CardFooter>
+          <Field orientation="horizontal">
+            <Button type="button" variant="outline" onClick={() => form.reset()}>
+              Reset
+            </Button>
+            <Button type="submit" form="register-form">
               Register
-            </button>
-          </Form>
-        </Formik>
-      </div>
+            </Button>
+          </Field>
+        </CardFooter>
+      </Card>
     </div>
   )
 }
-
-export default Register
